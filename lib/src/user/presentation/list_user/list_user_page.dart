@@ -94,7 +94,7 @@ class _ListUserPageState extends State<ListUserPage> {
                     );
                   } else if (state is ListUserLoadingState) {
                     return _buildShimmerLoading();
-                  } else if (state is ListUserEmptyState) {
+                  } else if (state is ListUserEmptyState || state is ListUserSearchEmptyState) {
                     return _buildEmptyListEmployee(state: state);
                   }
 
@@ -130,9 +130,10 @@ class _ListUserPageState extends State<ListUserPage> {
     dynamic state,
     required String keyword,
   }) {
+    _bloc.hasNoMoreData = false;
+    _bloc.isLoadingPagination = false;
     _bloc.add(ListUserInitEvent(
       page: 1,
-      limit: 20,
       searchKeyword: keyword.nullIfEmpty(),
     ));
   }
@@ -142,6 +143,7 @@ class _ListUserPageState extends State<ListUserPage> {
   }) {
     if (controller.text.isNotEmpty) {
       controller.clear();
+      _bloc.hasNoMoreData = false;
       _bloc.add(const ListUserInitEvent(
         page: 1,
         limit: 20,
@@ -176,6 +178,7 @@ class _ListUserPageState extends State<ListUserPage> {
             limit: 20,
           ));
         } else {
+          _bloc.hasNoMoreData = true;
           _bloc.add(ListUserApplyFilterEvent(
             selectedGenderType: selectedGenderType,
           ));
@@ -290,30 +293,42 @@ class _ListUserPageState extends State<ListUserPage> {
   Widget _buildFailedListEmployee({
     required ListUserState state,
   }) {
-    return Expanded(
-        child: Center(
+    return Column(
+      children: [
+        _buildSearchAndFilter(state, keywordController),
+        const SizedBox(
+          height: 16,
+        ),
+        Center(
           child: Text(
             'Request Failed: ${state.data.error?.message}',
             style: CommonTypography.roboto16.copyWith(
               fontWeight: FontWeight.w500,
             ),
           ),
-        )
+        ),
+      ],
     );
   }
 
   Widget _buildEmptyListEmployee({
     required ListUserState state,
   }) {
-    return Expanded(
-        child: Center(
+    return Column(
+      children: [
+        _buildSearchAndFilter(state, keywordController),
+        const SizedBox(
+          height: 16,
+        ),
+        Center(
           child: Text(
-            'There is no employee',
+            'There is no contact',
             style: CommonTypography.roboto16.copyWith(
               fontWeight: FontWeight.w500,
             ),
           ),
-        )
+        ),
+      ],
     );
   }
 

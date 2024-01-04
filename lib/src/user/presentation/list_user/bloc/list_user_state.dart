@@ -7,6 +7,7 @@ class ListUserStateData extends Equatable {
   final List<KeyValueDto> genderTypeOption;
   final List<KeyValueDto> selectedGenderType;
   final ErrorDto? error;
+  final int isSearchFound;
 
   const ListUserStateData({
     this.page = 1,
@@ -14,7 +15,8 @@ class ListUserStateData extends Equatable {
     this.userDto = const [],
     this.genderTypeOption = const [],
     this.selectedGenderType = const [],
-    this.error
+    this.error,
+    this.isSearchFound = -1,
   });
 
   @override
@@ -22,7 +24,8 @@ class ListUserStateData extends Equatable {
     page,
     limit,
     userDto,
-    error
+    error,
+    isSearchFound,
   ];
 
   ListUserStateData copyWith({
@@ -32,6 +35,7 @@ class ListUserStateData extends Equatable {
     List<KeyValueDto>? genderTypeOption,
     List<KeyValueDto>? selectedGenderType,
     ErrorDto? error,
+    int? isSearchFound,
   }) {
     return ListUserStateData(
       page: page ?? this.page,
@@ -40,6 +44,7 @@ class ListUserStateData extends Equatable {
       genderTypeOption: genderTypeOption ?? this.genderTypeOption,
       selectedGenderType: selectedGenderType ?? this.selectedGenderType,
       error: error ?? this.error,
+      isSearchFound : isSearchFound ?? this.isSearchFound,
     );
   }
 }
@@ -76,4 +81,8 @@ class ListUserSuccessState extends ListUserState {
 
 class ListUserEmptyState extends ListUserState {
   const ListUserEmptyState(super.data);
+}
+
+class ListUserSearchEmptyState extends ListUserState {
+  const ListUserSearchEmptyState(super.data);
 }

@@ -15,11 +15,13 @@ class UserRepositoryImpl extends UserRepository {
     int? page,
     int? limit,
     bool? isMale,
+    String? keyword,
   }) {
     return callOrError(() => userService.getListUser(
       page: page,
       limit: limit,
       isMale: isMale,
+      keyword: keyword
     ));
   }
 }
