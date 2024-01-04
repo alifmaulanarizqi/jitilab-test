@@ -12,17 +12,19 @@ import 'package:dio/dio.dart' as _i5;
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 import 'package:jitilab_test/core/data/local/app_preferences.dart' as _i4;
-import 'package:jitilab_test/core/di/local_module.dart' as _i9;
-import 'package:jitilab_test/core/di/network_module.dart' as _i10;
+import 'package:jitilab_test/core/di/local_module.dart' as _i10;
+import 'package:jitilab_test/core/di/network_module.dart' as _i11;
 import 'package:jitilab_test/src/user/data/remote/service/user_service.dart'
     as _i6;
 import 'package:jitilab_test/src/user/data/repository/user_repository.dart'
     as _i7;
 import 'package:jitilab_test/src/user/data/repository/user_repository_impl.dart'
-    as _i12;
-import 'package:jitilab_test/src/user/di/user_di_module.dart' as _i11;
-import 'package:jitilab_test/src/user/domain/usecase/list_user_usecase.dart'
+    as _i13;
+import 'package:jitilab_test/src/user/di/user_di_module.dart' as _i12;
+import 'package:jitilab_test/src/user/domain/usecase/detail_user_usecase.dart'
     as _i8;
+import 'package:jitilab_test/src/user/domain/usecase/list_user_usecase.dart'
+    as _i9;
 import 'package:shared_preferences/shared_preferences.dart' as _i3;
 
 extension GetItInjectableX on _i1.GetIt {
@@ -53,22 +55,24 @@ extension GetItInjectableX on _i1.GetIt {
         networkModule.dio(gh<String>(instanceName: 'base_url')));
     gh.singleton<_i6.UserService>(employeeDiModule.userService(gh<_i5.Dio>()));
     gh.singleton<_i7.UserRepository>(employeeDiModule.userRepository);
-    gh.factory<_i8.ListUserUseCase>(
-        () => employeeDiModule.listEmployeeUseCase(gh<_i7.UserRepository>()));
+    gh.factory<_i8.DetailUserUseCase>(
+        () => employeeDiModule.detailUserUseCase(gh<_i7.UserRepository>()));
+    gh.factory<_i9.ListUserUseCase>(
+        () => employeeDiModule.listUserUseCase(gh<_i7.UserRepository>()));
     return this;
   }
 }
 
-class _$LocalModule extends _i9.LocalModule {}
+class _$LocalModule extends _i10.LocalModule {}
 
-class _$NetworkModule extends _i10.NetworkModule {}
+class _$NetworkModule extends _i11.NetworkModule {}
 
-class _$EmployeeDiModule extends _i11.EmployeeDiModule {
+class _$EmployeeDiModule extends _i12.EmployeeDiModule {
   _$EmployeeDiModule(this._getIt);
 
   final _i1.GetIt _getIt;
 
   @override
-  _i12.UserRepositoryImpl get userRepository =>
-      _i12.UserRepositoryImpl(_getIt<_i6.UserService>());
+  _i13.UserRepositoryImpl get userRepository =>
+      _i13.UserRepositoryImpl(_getIt<_i6.UserService>());
 }

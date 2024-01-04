@@ -17,7 +17,7 @@ class UserResponse {
   @JsonKey(name: 'is_male')
   final bool? isMale;
 
-  UserResponse(
+  const UserResponse(
       this.id,
       this.email,
       this.phone,

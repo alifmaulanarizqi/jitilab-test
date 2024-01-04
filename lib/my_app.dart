@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jitilab_test/src/splash/presenation/splash_page.dart';
+import 'package:jitilab_test/src/user/presentation/detail_user/detail_user_page.dart';
 import 'package:jitilab_test/src/user/presentation/list_user/list_user_page.dart';
 
 class MyApp extends StatelessWidget {
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
       routes: {
         SplashPage.route: (ctx) => const SplashPage(),
         ListUserPage.route: (ctx) => const ListUserPage(),
+        DetailUserPage.route: (ctx) => const DetailUserPage(),
       },
     );
   }

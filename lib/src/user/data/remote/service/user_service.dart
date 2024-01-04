@@ -16,4 +16,9 @@ abstract class UserService {
     @Query('is_male') bool? isMale,
     @Query('name') String? keyword,
   });
+
+  @GET('/users/{id}')
+  Future<UserResponse> getUserById({
+    @Path('id') int? id,
+  });
 }

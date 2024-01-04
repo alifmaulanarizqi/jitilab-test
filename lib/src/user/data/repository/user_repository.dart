@@ -8,4 +8,8 @@ abstract class UserRepository {
     bool? isMale,
     String? keyword,
   });
+
+  FutureOrError<UserResponse> getUserById({
+    int? id
+  });
 }
