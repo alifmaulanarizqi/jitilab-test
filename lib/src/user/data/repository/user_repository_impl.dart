@@ -24,4 +24,11 @@ class UserRepositoryImpl extends UserRepository {
       keyword: keyword
     ));
   }
+
+  @override
+  FutureOrError<UserResponse> getUserById({
+    int? id
+  }) {
+    return callOrError(() => userService.getUserById(id: id));
+  }
 }

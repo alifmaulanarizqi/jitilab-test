@@ -7,6 +7,8 @@ import '../../../../common_ui/utils/colors/common_colors.dart';
 import '../../../../common_ui/utils/text_style/common_text_style.dart';
 import '../../../../common_ui/widgets/common_search_filter.dart';
 import '../../../../core/domain/models/key_value_dto.dart';
+import '../detail_user/arg/detail_user_arg.dart';
+import '../detail_user/detail_user_page.dart';
 import 'bloc/list_user_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -214,13 +216,13 @@ class _ListUserPageState extends State<ListUserPage> {
                 if(index < _bloc.stateData.userDto.length - 1 || lastIndex) {
                   return GestureDetector(
                     onTap: () {
-                      // Navigator.pushNamed(
-                      //   context,
-                      //   DetailEmployeePage.route,
-                      //   arguments: DetailEmployeeArg(
-                      //       id: state.data.employeeDto[index].id
-                      //   ),
-                      // );
+                      Navigator.pushNamed(
+                        context,
+                        DetailUserPage.route,
+                        arguments: DetailUserArg(
+                            id: int.parse(state.data.userDto[index].id ?? '0')
+                        ),
+                      );
                     },
                     child: Card(
                       color: CommonColors.whiteFB,
