@@ -263,12 +263,6 @@ class _ListUserPageState extends State<ListUserPage> {
                                   '${state.data.userDto[index].phone}',
                                   style: CommonTypography.roboto16,
                                 ),
-                                const SizedBox(
-                                  height: 8,
-                                ),
-                                Text(
-                                  '${state.data.userDto[index].isMale}'
-                                )
                               ],
                             ),
                           ),
