@@ -5,5 +5,6 @@ abstract class UserRepository {
   FutureOrError<List<UserResponse>> getListUser({
     int? page,
     int? limit,
+    bool? isMale,
   });
 }

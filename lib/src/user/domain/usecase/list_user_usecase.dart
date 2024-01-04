@@ -12,10 +12,12 @@ class ListUserUseCase {
   FutureOrError<List<UserResponse>> execute({
     int? page,
     int? limit,
+    bool? isMale,
   }) async {
     return _repository.getListUser(
       page: page,
       limit: limit,
+      isMale: isMale
     ).mapRight((response) {
       return response;
     });

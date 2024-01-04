@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jitilab_test/core/utils/value_extension.dart';
+import '../../../../common_ui/dialogs/common_dialogs.dart';
 import '../../../../common_ui/utils/colors/common_colors.dart';
 import '../../../../common_ui/utils/text_style/common_text_style.dart';
+import '../../../../common_ui/widgets/common_search_filter.dart';
+import '../../../../core/domain/models/key_value_dto.dart';
 import 'bloc/list_user_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -18,6 +22,7 @@ class ListUserPage extends StatefulWidget {
 class _ListUserPageState extends State<ListUserPage> {
   late ListUserBloc _bloc;
   final ScrollController _scrollController = ScrollController();
+  final keywordController = TextEditingController();
 
   @override
   void initState() {
@@ -25,7 +30,9 @@ class _ListUserPageState extends State<ListUserPage> {
     _scrollController.addListener(_onScroll);
     _bloc = ListUserBloc(listUserUseCase: GetIt.instance())
       ..add(const ListUserInitEvent(
-          page: 1));
+          page: 1,
+          limit: 20,
+      ));
   }
 
   @override
@@ -78,6 +85,7 @@ class _ListUserPageState extends State<ListUserPage> {
                           onPressed: () {
                             _bloc.add(const ListUserInitEvent(
                               page: 1,
+                              limit: 20,
                             ));
                           },
                           child: const Text('Refresh'),
@@ -98,91 +106,184 @@ class _ListUserPageState extends State<ListUserPage> {
     );
   }
 
+  Widget _buildSearchAndFilter(ListUserState state, TextEditingController controller) {
+    return CommonSearchFilterAction(
+      onDoSearch: (keyword) {
+        _onDoSearch(state: state, keyword: keyword,);
+      },
+      onClearSearch: () {
+        _onClearSearchKeyword(controller: controller);
+      },
+      onFilter: () {
+        _onShowFilterDialog(
+          state: state,
+          genderTypeOption: state.data.genderTypeOption,
+          lastSelectedGenderExtension: state.data.selectedGenderType,
+        );
+      },
+      keywordController: controller,
+      hintSearch: "Search",
+    );
+  }
+
+  void _onDoSearch({
+    dynamic state,
+    required String keyword,
+  }) {
+    _bloc.add(ListUserInitEvent(
+      page: 1,
+      limit: 20,
+      searchKeyword: keyword.nullIfEmpty(),
+    ));
+  }
+
+  void _onClearSearchKeyword({
+    required TextEditingController controller
+  }) {
+    if (controller.text.isNotEmpty) {
+      controller.clear();
+      _bloc.add(const ListUserInitEvent(
+        page: 1,
+        limit: 20,
+        searchKeyword: null,
+      ));
+    }
+  }
+
+  void _onShowFilterDialog({
+    required dynamic state,
+    List<KeyValueDto> genderTypeOption = const [],
+    List<KeyValueDto> lastSelectedGenderExtension = const [],
+  }) async {
+    var result = await CommonDialogs.showListUserFilter(
+      context,
+      isSingleSelected: true,
+      genderTypeOptions: genderTypeOption,
+      lastSelectedGender: lastSelectedGenderExtension,
+      title: 'Filter',
+    );
+
+    if (result != null) {
+      try {
+        List<KeyValueDto> selectedGenderType = result[0];
+
+        keywordController.clear();
+        if(selectedGenderType.isEmpty) {
+          _bloc.hasNoMoreData = false;
+          _bloc.isLoadingPagination = false;
+          _bloc.add(const ListUserInitEvent(
+            page: 1,
+            limit: 20,
+          ));
+        } else {
+          _bloc.add(ListUserApplyFilterEvent(
+            selectedGenderType: selectedGenderType,
+          ));
+        }
+
+      } on Exception catch (e) {
+        CommonDialogs.showToastMessage(e.toString());
+      }
+    } else {
+      //_bloc.add(CourseListCancelFilterEvent());
+    }
+  }
+
   Widget _buildListEmployee({
     required ListUserState state,
   }) {
-    return ListView.builder(
-        controller: _scrollController,
-        itemCount: state.data.userDto.length,
-        itemBuilder: (context, index) {
-          bool lastIndex = false;
-          if(_bloc.hasNoMoreData) {
-            lastIndex = index == _bloc.stateData.userDto.length - 1;
-          }
-
-          if(index < _bloc.stateData.userDto.length - 1 || lastIndex) {
-            return GestureDetector(
-              onTap: () {
-                // Navigator.pushNamed(
-                //   context,
-                //   DetailEmployeePage.route,
-                //   arguments: DetailEmployeeArg(
-                //       id: state.data.employeeDto[index].id
-                //   ),
-                // );
-              },
-              child: Card(
-                color: CommonColors.whiteFB,
-                elevation: 1,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      height: 130,
-                      width: 100,
-                      child: Image.network(
-                        state.data.userDto[index].avatar ?? '',
-                        fit: BoxFit.cover,
-                        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                          if (loadingProgress == null) {
-                            return child;
-                          }
-                          return Center(
-                            child: CircularProgressIndicator(
-                              value: loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-                                  : null,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 12,
-                    ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
+    return Column(
+      children: [
+        _buildSearchAndFilter(state, keywordController),
+        const SizedBox(
+          height: 16,
+        ),
+        Expanded(
+          child: ListView.builder(
+              controller: _scrollController,
+              itemCount: state.data.userDto.length,
+              itemBuilder: (context, index) {
+                bool lastIndex = false;
+                if(_bloc.hasNoMoreData) {
+                  lastIndex = index == _bloc.stateData.userDto.length - 1;
+                }
+          
+                if(index < _bloc.stateData.userDto.length - 1 || lastIndex) {
+                  return GestureDetector(
+                    onTap: () {
+                      // Navigator.pushNamed(
+                      //   context,
+                      //   DetailEmployeePage.route,
+                      //   arguments: DetailEmployeeArg(
+                      //       id: state.data.employeeDto[index].id
+                      //   ),
+                      // );
+                    },
+                    child: Card(
+                      color: CommonColors.whiteFB,
+                      elevation: 1,
+                      child: Row(
                         children: [
-                          Text(
-                            '${state.data.userDto[index].name}',
-                            style: CommonTypography.roboto16,
+                          SizedBox(
+                            height: 130,
+                            width: 100,
+                            child: Image.network(
+                              state.data.userDto[index].avatar ?? '',
+                              fit: BoxFit.cover,
+                              loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                                if (loadingProgress == null) {
+                                  return child;
+                                }
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    value: loadingProgress.expectedTotalBytes != null
+                                        ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                                        : null,
+                                  ),
+                                );
+                              },
+                            ),
                           ),
                           const SizedBox(
-                            height: 8,
+                            width: 12,
                           ),
-                          Text(
-                            '${state.data.userDto[index].phone}',
-                            style: CommonTypography.roboto16,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '${state.data.userDto[index].name}',
+                                  style: CommonTypography.roboto16,
+                                ),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                Text(
+                                  '${state.data.userDto[index].phone}',
+                                  style: CommonTypography.roboto16,
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-            );
-          } else if(!_bloc.hasNoMoreData) {
-            return const Padding(
-              padding: EdgeInsets.symmetric(vertical: 20.0),
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }
-
-          return const SizedBox.shrink();
-        }
+                  );
+                } else if(!_bloc.hasNoMoreData) {
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20.0),
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                }
+          
+                return const SizedBox.shrink();
+              }
+          ),
+        ),
+      ],
     );
   }
 

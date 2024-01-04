@@ -22,6 +22,8 @@ class CommonColors {
   static const Color greyD1 = Color(0xFFD1D1D1);
   static const Color greyBD = Color(0xFFBDBDBD);
   static const Color grey75 = Color(0xFF757575);
+  static const Color greyD9 = Color(0xFFD9D9D9);
+  static const Color greyD4 = Color(0xFFD4D4D4);
 
   static const Color white = Color(0xFFFFFFFF);
   static const Color whiteFB = Color(0xFFF3F7FB);
@@ -31,6 +33,8 @@ class CommonColors {
   static const Color blueE9 = Color(0xFFC5CAE9);
   static const Color blueB5 = Color(0xFF3F51B5);
   static const Color orange00 = Color(0xFFFF9800);
+  static const Color blueC9 = Color(0xFF1FA0C9);
+  static const Color blueF9 = Color(0xFFE8F0F9);
 
   static const Color green50 = Color(0xFF4CAF50);
   static const Color red52 = Color(0xFFFF5252);

@@ -12,7 +12,7 @@ UserResponse _$UserResponseFromJson(Map<String, dynamic> json) => UserResponse(
       json['phone'] as String?,
       json['name'] as String?,
       json['avatar'] as String?,
-      json['gender'] as String?,
+      json['is_male'] as bool?,
     );
 
 Map<String, dynamic> _$UserResponseToJson(UserResponse instance) =>
@@ -22,5 +22,5 @@ Map<String, dynamic> _$UserResponseToJson(UserResponse instance) =>
       'phone': instance.phone,
       'name': instance.name,
       'avatar': instance.avatar,
-      'gender': instance.gender,
+      'is_male': instance.isMale,
     };
