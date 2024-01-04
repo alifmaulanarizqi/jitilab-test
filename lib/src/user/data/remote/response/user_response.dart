@@ -14,8 +14,8 @@ class UserResponse {
   final String? name;
   @JsonKey(name: 'avatar')
   final String? avatar;
-  @JsonKey(name: 'gender')
-  final String? gender;
+  @JsonKey(name: 'is_male')
+  final bool? isMale;
 
   UserResponse(
       this.id,
@@ -23,7 +23,7 @@ class UserResponse {
       this.phone,
       this.name,
       this.avatar,
-      this.gender,
+      this.isMale,
       );
 
   factory UserResponse.fromJson(Map<String, dynamic> json) =>

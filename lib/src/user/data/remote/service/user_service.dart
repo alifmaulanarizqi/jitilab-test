@@ -13,5 +13,6 @@ abstract class UserService {
   Future<List<UserResponse>> getListUser({
     @Query('page') int? page,
     @Query('limit') int? limit,
+    @Query('is_male') bool? isMale,
   });
 }

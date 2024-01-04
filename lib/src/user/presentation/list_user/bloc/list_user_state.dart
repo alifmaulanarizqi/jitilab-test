@@ -4,12 +4,16 @@ class ListUserStateData extends Equatable {
   final int page;
   final int limit;
   final List<UserResponse> userDto;
+  final List<KeyValueDto> genderTypeOption;
+  final List<KeyValueDto> selectedGenderType;
   final ErrorDto? error;
 
   const ListUserStateData({
     this.page = 1,
     this.limit = 10,
     this.userDto = const [],
+    this.genderTypeOption = const [],
+    this.selectedGenderType = const [],
     this.error
   });
 
@@ -25,12 +29,16 @@ class ListUserStateData extends Equatable {
     int? page,
     int? limit,
     List<UserResponse>? userDto,
+    List<KeyValueDto>? genderTypeOption,
+    List<KeyValueDto>? selectedGenderType,
     ErrorDto? error,
   }) {
     return ListUserStateData(
       page: page ?? this.page,
       limit: limit ?? this.limit,
       userDto: userDto ?? this.userDto,
+      genderTypeOption: genderTypeOption ?? this.genderTypeOption,
+      selectedGenderType: selectedGenderType ?? this.selectedGenderType,
       error: error ?? this.error,
     );
   }

@@ -13,11 +13,13 @@ class UserRepositoryImpl extends UserRepository {
   @override
   FutureOrError<List<UserResponse>> getListUser({
     int? page,
-    int? limit
+    int? limit,
+    bool? isMale,
   }) {
     return callOrError(() => userService.getListUser(
       page: page,
       limit: limit,
+      isMale: isMale,
     ));
   }
 }

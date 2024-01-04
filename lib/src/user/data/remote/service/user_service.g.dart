@@ -22,11 +22,13 @@ class _UserService implements UserService {
   Future<List<UserResponse>> getListUser({
     int? page,
     int? limit,
+    bool? isMale,
   }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'page': page,
       r'limit': limit,
+      r'is_male': isMale,
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
