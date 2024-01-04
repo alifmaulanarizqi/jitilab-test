@@ -1,16 +1,9 @@
-# jitilab_test
+# Jitilab Test
 
 A new Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Projek ini dibuat menggunakan flavor, maka jika ingin menjalankan aplikasi bisa melalui command `flutter run --flavor staging -t lib/main_staging.dart`.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+File APK terdapat pada folder apk, atau bisa mendownload file APK melalui [link berikut](https://drive.google.com/file/d/1oG00_3Q00TbTo5p4zr-J-Iohaer9dLYa/view?usp=drive_link)
