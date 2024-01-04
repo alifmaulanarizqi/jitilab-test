@@ -13,11 +13,13 @@ class ListUserUseCase {
     int? page,
     int? limit,
     bool? isMale,
+    String? keyword,
   }) async {
     return _repository.getListUser(
       page: page,
       limit: limit,
-      isMale: isMale
+      isMale: isMale,
+      keyword: keyword ?? '',
     ).mapRight((response) {
       return response;
     });

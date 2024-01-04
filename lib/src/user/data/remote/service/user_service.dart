@@ -14,5 +14,6 @@ abstract class UserService {
     @Query('page') int? page,
     @Query('limit') int? limit,
     @Query('is_male') bool? isMale,
+    @Query('name') String? keyword,
   });
 }

@@ -23,12 +23,14 @@ class _UserService implements UserService {
     int? page,
     int? limit,
     bool? isMale,
+    String? keyword,
   }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'page': page,
       r'limit': limit,
       r'is_male': isMale,
+      r'name': keyword,
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};

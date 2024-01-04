@@ -47,11 +47,23 @@ class ListUserBloc extends Bloc<ListUserEvent, ListUserState> {
       page: event.page,
     );
 
-    await _doSearch(page: event.page, limit: event.limit);
+    await _doSearch(
+      page: event.page,
+      limit: event.limit,
+      keyword: event.searchKeyword,
+    );
 
     if (stateData.error != null) {
       emit(ListUserFailedState(stateData));
     } else {
+      if(stateData.isSearchFound == 0) {
+        stateData = stateData.copyWith(
+          isSearchFound: -1,
+        );
+        emit(ListUserSearchEmptyState(stateData));
+        return;
+      }
+
       if(stateData.userDto.isEmpty){
         emit(ListUserEmptyState(stateData));
       } else{
@@ -90,6 +102,7 @@ class ListUserBloc extends Bloc<ListUserEvent, ListUserState> {
     int? page,
     int? limit,
     int? isMaleInt,
+    String? keyword,
   }) async {
     bool? isMale;
     if(isMaleInt == 0) {
@@ -102,9 +115,19 @@ class ListUserBloc extends Bloc<ListUserEvent, ListUserState> {
       page: page,
       limit: limit,
       isMale: isMale,
+      keyword: keyword
     );
 
     result.fold((ErrorDto error) {
+      if(keyword != null) {
+        stateData = stateData.copyWith(
+          isSearchFound: 0,
+          userDto: [],
+        );
+        hasNoMoreData = true;
+        return;
+      }
+
       if (page == 1) {
         stateData = stateData.copyWith(
           userDto: [],
@@ -128,6 +151,10 @@ class ListUserBloc extends Bloc<ListUserEvent, ListUserState> {
           userDto: right,
           error: null,
         );
+
+        if(keyword != null) {
+          hasNoMoreData = true;
+        }
       } else {
         var previousEmployee = stateData.userDto;
         previousEmployee.addAll(right);

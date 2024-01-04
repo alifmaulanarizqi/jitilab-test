@@ -6,5 +6,6 @@ abstract class UserRepository {
     int? page,
     int? limit,
     bool? isMale,
+    String? keyword,
   });
 }
